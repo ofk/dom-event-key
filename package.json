@@ -5,14 +5,15 @@
   "description": "",
   "license": "UNLICENSED",
   "author": "",
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "dist/dom-event-key.cjs",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "microbundle --tsconfig tsconfig.build.json",
     "lint": "run-s -c lint:*",
     "lint:eslint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:package-json": "prettier-package-json -l",
@@ -46,6 +47,9 @@
     "typescript": "^5.2.2"
   },
   "keywords": [],
+  "browserslist": [
+    "since 2017-06"
+  ],
   "lint-staged": {
     "package.json": "prettier-package-json --write",
     "*.{md,json,html}": "prettier --write",
@@ -53,5 +57,6 @@
       "eslint --fix --ext .js,.jsx,.ts,.tsx",
       "prettier --write"
     ]
-  }
+  },
+  "source": "src/index.ts"
 }
