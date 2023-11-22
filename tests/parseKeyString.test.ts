@@ -1,4 +1,3 @@
-import { createKeyStrings } from '../src';
 import { parseKeyString } from '../src/parseKeyString';
 
 const itReturnsTheResultOfParsing = (input: string, fn: Parameters<typeof it>[1]): void => {
