@@ -1,7 +1,7 @@
 import type { CreateKeyStringsOptions, KeyStrings } from './createKeyStrings';
 import { createKeyStrings } from './createKeyStrings';
 import type { KeyState } from './keyState';
-import { createKeyState, equalKeyState } from './keyState';
+import { createKeyState } from './keyState';
 import type { KeyStateWithWarning, ParseKeyStringsOptions } from './parseKeyString';
 import { parseKeyString } from './parseKeyString';
 
@@ -66,7 +66,9 @@ export function parseEventKey(
 export function equalEventKey(
   a: KeyState | string,
   b: KeyState | string,
-  options: ParseKeyStringsOptions = {},
+  options: CreateKeyStringsOptions = {},
 ): boolean {
-  return equalKeyState(parseEventKey(a, options), parseEventKey(b, options));
+  const aKeys = createEventKeys(parseEventKey(a, options), options);
+  const bKeys = createEventKeys(parseEventKey(b, options), options);
+  return aKeys.some((aKey) => bKeys.includes(aKey));
 }
