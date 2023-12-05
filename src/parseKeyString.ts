@@ -13,6 +13,7 @@ export interface KeyStringParseWarning {
 }
 
 export interface KeyStateWithWarning extends KeyState {
+  modKey: boolean;
   warning: KeyStringParseWarning | null;
 }
 
@@ -20,12 +21,14 @@ export function parseKeyString(
   keyString: string,
   { metaModifierKey }: ParseKeyStringsOptions = {},
 ): KeyStateWithWarning {
-  const state: KeyState = {
+  const state: KeyStateWithWarning = {
     ctrlKey: false,
     metaKey: false,
     altKey: false,
     shiftKey: false,
     key: '',
+    modKey: false,
+    warning: null,
   };
   const warning: KeyStringParseWarning = {};
 
@@ -53,6 +56,7 @@ export function parseKeyString(
       warning.looseModifierKeys ||= key !== 'Modifier';
       warning.looseOrder ||= orderCount !== 0;
       orderCount = 3;
+      state.modKey = true;
       state[metaModifierKey ? 'metaKey' : 'ctrlKey'] = true;
     } else if (/^shift/i.test(key)) {
       warning.looseModifierKeys ||= key !== 'Shift';
@@ -95,8 +99,10 @@ export function parseKeyString(
 
   const warningEntries = Object.entries(warning).filter(([_k, v]) => v);
 
-  return {
-    ...state,
-    warning: warningEntries.length ? Object.fromEntries(warningEntries) : null,
-  };
+  return warningEntries.length
+    ? {
+        ...state,
+        warning: warningEntries.length ? Object.fromEntries(warningEntries) : null,
+      }
+    : state;
 }
