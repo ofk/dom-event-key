@@ -4,6 +4,7 @@
   "description": "dom-event-key simplifies handling browser keyboard events",
   "license": "MIT",
   "author": "ofk <ofkjpn+npm@gmail.com> (https://github.com/ofk/)",
+  "repository": "ofk/dom-event-key",
   "type": "module",
   "main": "dist/dom-event-key.cjs",
   "files": [
