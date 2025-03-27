@@ -3,7 +3,11 @@
   "version": "1.0.2",
   "description": "dom-event-key simplifies handling browser keyboard events",
   "license": "MIT",
-  "author": "ofk <ofkjpn+npm@gmail.com> (https://github.com/ofk/)",
+  "author": "ofk (https://github.com/ofk/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ofk/dom-event-key.git"
+  },
   "type": "module",
   "exports": {
     ".": {
