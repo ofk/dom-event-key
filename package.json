@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "build": "tsup",
+    "dev": "vite",
     "lint": "run-s lint:**",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
