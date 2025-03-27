@@ -1,5 +1,8 @@
 # dom-event-key
 
+[![npm](https://img.shields.io/npm/v/dom-event-key)](https://npmjs.com/package/dom-event-key)
+![ci](https://github.com/ofk/dom-event-key/actions/workflows/ci.yml/badge.svg)
+
 dom-event-key simplifies handling browser keyboard events by providing a convenient way to check if a given key event matches a specified shortcut key.
 
 ## Install
