@@ -1,12 +1,14 @@
 import type { CreateKeyStringsOptions, KeyStrings } from './createKeyStrings';
-import { createKeyStrings } from './createKeyStrings';
 import type { KeyState } from './keyState';
-import { createKeyState } from './keyState';
 import type { KeyStateWithWarning, ParseKeyStringsOptions } from './parseKeyString';
+
+import { createKeyStrings } from './createKeyStrings';
+import { createKeyState } from './keyState';
 import { parseKeyString } from './parseKeyString';
 
 export const metaModifierKey = /Mac|iPod|iPhone|iPad/.test(
-  typeof navigator !== 'undefined' ? navigator.platform : '',
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
+  typeof navigator === 'undefined' ? '' : navigator.platform,
 );
 
 export const keyboardLayoutMap = ((): Map<string, string> => {
@@ -35,6 +37,7 @@ export const keyboardLayoutMap = ((): Map<string, string> => {
   }
 
   for (let i = 0; i < 26; i += 1) {
+    // eslint-disable-next-line unicorn/prefer-code-point
     const c = String.fromCharCode(97 + i);
     defaultKeyboardLayoutMap.push([`Key${c.toUpperCase()}`, c]);
   }
@@ -47,9 +50,9 @@ export function createEventKeys(
   options: CreateKeyStringsOptions = {},
 ): KeyStrings {
   return createKeyStrings(state, {
-    modifierKey: true,
-    metaModifierKey,
     keyboardLayoutMap,
+    metaModifierKey,
+    modifierKey: true,
     ...options,
   });
 }

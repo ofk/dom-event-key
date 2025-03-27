@@ -1,14 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
+
 import { parseKeyString } from '../src/parseKeyString';
 
 const testParsing = (input: string, state: Partial<ReturnType<typeof parseKeyString>>): void => {
-  it(`returns the result of pressing ${JSON.stringify(input)}`, () => {
-    expect(parseKeyString(input)).toEqual({
-      ctrlKey: false,
-      metaKey: false,
+  test(`returns the result of pressing ${JSON.stringify(input)}`, () => {
+    expect(parseKeyString(input)).toStrictEqual({
       altKey: false,
-      shiftKey: false,
+      ctrlKey: false,
       key: '',
+      metaKey: false,
+      shiftKey: false,
       warning: null,
       ...state,
     });
@@ -18,21 +19,23 @@ const testParsing = (input: string, state: Partial<ReturnType<typeof parseKeyStr
 describe('parseKeyString', () => {
   testParsing('a', { key: 'a' });
   testParsing('Control', { ctrlKey: true });
-  testParsing('Control+a', { key: 'a', ctrlKey: true });
+  testParsing('Control+a', { ctrlKey: true, key: 'a' });
   testParsing('Control+Meta', { ctrlKey: true, metaKey: true });
   testParsing('Meta+a', { key: 'a', metaKey: true });
-  testParsing('Modifier+a', { key: 'a', ctrlKey: true });
+  testParsing('Modifier+a', { ctrlKey: true, key: 'a' });
+
   it('returns the result of pressing "Modifier+a for Mac"', () => {
-    expect(parseKeyString('Modifier+a', { metaModifierKey: true })).toEqual({
-      ctrlKey: false,
-      metaKey: true,
+    expect(parseKeyString('Modifier+a', { metaModifierKey: true })).toStrictEqual({
       altKey: false,
-      shiftKey: false,
+      ctrlKey: false,
       key: 'a',
+      metaKey: true,
+      shiftKey: false,
       warning: null,
     });
   });
-  testParsing('Alt+a', { key: 'a', altKey: true });
+
+  testParsing('Alt+a', { altKey: true, key: 'a' });
   testParsing('A', { key: 'A', shiftKey: true });
   testParsing('Space', { key: 'Space' });
   testParsing('Shift+Space', { key: 'Space', shiftKey: true });
@@ -46,15 +49,15 @@ describe('parseKeyString', () => {
   testParsing('mod', { ctrlKey: true, warning: { looseModifierKeys: true } });
   testParsing('alt', { altKey: true, warning: { looseModifierKeys: true } });
   testParsing('Control+Control', { ctrlKey: true, warning: { looseOrder: true } });
-  testParsing('a+Control', { key: 'a', ctrlKey: true, warning: { looseOrder: true } });
+  testParsing('a+Control', { ctrlKey: true, key: 'a', warning: { looseOrder: true } });
   testParsing('Meta+Control', { ctrlKey: true, metaKey: true, warning: { looseOrder: true } });
   testParsing('Shift+Meta', { metaKey: true, shiftKey: true, warning: { looseOrder: true } });
-  testParsing('Alt+Shift', { shiftKey: true, altKey: true, warning: { looseOrder: true } });
+  testParsing('Alt+Shift', { altKey: true, shiftKey: true, warning: { looseOrder: true } });
   testParsing('Shift+a', { key: 'A', shiftKey: true, warning: { looseKey: true } });
   testParsing('Shift+A', { key: 'A', shiftKey: true, warning: { looseModifierKeys: true } });
   testParsing('Control+A', {
-    key: 'A',
     ctrlKey: true,
+    key: 'A',
     shiftKey: true,
     warning: { looseModifierKeys: true },
   });
