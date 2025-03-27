@@ -16,7 +16,7 @@ function h<T extends keyof HTMLElementTagNameMap>(
     }
   });
   children.forEach((child) => {
-    elem.appendChild(typeof child === 'object' ? child : document.createTextNode(child));
+    elem.append(typeof child === 'object' ? child : document.createTextNode(child));
   });
   return elem;
 }
@@ -40,15 +40,15 @@ const allowedKeystrokeSection = h(
   allowedKeystrokeResult,
 );
 
-document.body.appendChild(allowedKeystrokeSection);
+document.body.append(allowedKeystrokeSection);
 
 const keyEventsTrHeader = h('tr');
 const keyEventsTrResult = h('tr');
 
 ['keydown', 'keyup'].forEach((type) => {
   const result = h('pre');
-  keyEventsTrHeader.appendChild(h('th', {}, type));
-  keyEventsTrResult.appendChild(h('td', {}, result));
+  keyEventsTrHeader.append(h('th', {}, type));
+  keyEventsTrResult.append(h('td', {}, result));
 
   window.addEventListener(type, (e) => {
     const evt = e as KeyboardEvent;
@@ -80,4 +80,4 @@ const keyEventsSection = h(
   ),
 );
 
-document.body.appendChild(keyEventsSection);
+document.body.append(keyEventsSection);

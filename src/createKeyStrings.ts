@@ -1,19 +1,19 @@
 import type { KeyState } from './keyState';
+
 import { createKeyState } from './keyState';
 
 export type KeyStrings = [string, ...string[]];
 
 interface ToCtrlMetaStringsOptions {
-  modifierKey?: boolean;
   metaModifierKey?: boolean;
+  modifierKey?: boolean;
 }
 
 function toCtrlMetaStrings(
   { ctrlKey, metaKey }: KeyState,
-  { modifierKey, metaModifierKey = false }: ToCtrlMetaStringsOptions,
+  { metaModifierKey = false, modifierKey }: ToCtrlMetaStringsOptions,
 ): KeyStrings {
   const ctrlMeta = `${ctrlKey ? '+Control' : ''}${metaKey ? '+Meta' : ''}`;
-
   const isModkey = modifierKey
     ? metaModifierKey
       ? !ctrlKey && metaKey
@@ -27,7 +27,7 @@ interface ToAltShitKeyStringsOptions {
 }
 
 function toAltShitKeyStrings(
-  { altKey, shiftKey, key, code }: KeyState,
+  { altKey, code, key, shiftKey }: KeyState,
   { keyboardLayoutMap }: ToAltShitKeyStringsOptions,
 ): KeyStrings {
   const pressKey = key ? `+${key}` : '';
@@ -44,10 +44,10 @@ function toAltShitKeyStrings(
   if (keyboardLayoutMap && code) {
     const layoutKey = keyboardLayoutMap.get(code);
     if (layoutKey) {
-      if (shiftKey && /^\+[\x21-\x7e]$/.test(pressKey)) {
+      if (shiftKey && /^\+[\u0021-\u007E]$/.test(pressKey)) {
         return [`${alt}${shift}+${layoutKey}`, `${alt}${pressKey}`];
       }
-      if (altKey && !/^\+[\x21-\x7e]$/.test(pressKey)) {
+      if (altKey && !/^\+[\u0021-\u007E]$/.test(pressKey)) {
         return [
           `${alt}${shift}+${layoutKey}`,
           ...(shiftKey && /^[a-z]$/.test(layoutKey) ? [`${alt}+${layoutKey.toUpperCase()}`] : []),
@@ -61,8 +61,8 @@ function toAltShitKeyStrings(
 }
 
 export interface CreateKeyStringsOptions
-  extends ToCtrlMetaStringsOptions,
-    ToAltShitKeyStringsOptions {}
+  extends ToAltShitKeyStringsOptions,
+    ToCtrlMetaStringsOptions {}
 
 // ex.
 //   a -> ['a']
@@ -77,10 +77,10 @@ export interface CreateKeyStringsOptions
 //   Meta+Shift+A -> ['Modifier+Shit+a','Meta+Shift+a','Modifier+A','Meta+A']
 export function createKeyStrings(
   rawState: KeyState,
-  { modifierKey, metaModifierKey, keyboardLayoutMap }: CreateKeyStringsOptions = {},
+  { keyboardLayoutMap, metaModifierKey, modifierKey }: CreateKeyStringsOptions = {},
 ): KeyStrings {
   const state = createKeyState(rawState);
-  const ctrlMetaStrings = toCtrlMetaStrings(state, { modifierKey, metaModifierKey });
+  const ctrlMetaStrings = toCtrlMetaStrings(state, { metaModifierKey, modifierKey });
   const altShitKeyStrings = toAltShitKeyStrings(state, { keyboardLayoutMap });
   const hotkeys = altShitKeyStrings.reduce<string[]>(
     (result, altShiftKey) => [

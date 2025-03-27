@@ -5,11 +5,11 @@ export interface ParseKeyStringsOptions {
 }
 
 export interface KeyStringParseWarning {
-  unnecessarySpaces?: boolean;
+  invalidKeys?: boolean;
+  looseKey?: boolean;
   looseModifierKeys?: boolean;
   looseOrder?: boolean;
-  looseKey?: boolean;
-  invalidKeys?: boolean;
+  unnecessarySpaces?: boolean;
 }
 
 export interface KeyStateWithWarning extends KeyState {
@@ -21,23 +21,30 @@ export function parseKeyString(
   { metaModifierKey }: ParseKeyStringsOptions = {},
 ): KeyStateWithWarning {
   const state: KeyState = {
-    ctrlKey: false,
-    metaKey: false,
     altKey: false,
-    shiftKey: false,
+    ctrlKey: false,
     key: '',
+    metaKey: false,
+    shiftKey: false,
   };
-  const warning: KeyStringParseWarning = {};
+  const warning: Required<KeyStringParseWarning> = {
+    invalidKeys: false,
+    looseKey: false,
+    looseModifierKeys: false,
+    looseOrder: false,
+    unnecessarySpaces: false,
+  };
 
   let orderCount = 0;
 
+  // eslint-disable-next-line no-useless-assignment
   let m: RegExpExecArray | null = null;
   const reg = /(.[^+]*)(?:\+|$)/g;
 
   while ((m = reg.exec(keyString))) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rawKey = m[1]!;
-    const key = rawKey.replace(/\s+/g, '');
+    const key = rawKey.replaceAll(/\s+/g, '');
     warning.unnecessarySpaces ||= rawKey !== ' ' && rawKey !== key;
     if (/^c.*?tr/i.test(key)) {
       warning.looseModifierKeys ||= key !== 'Control';
@@ -85,17 +92,15 @@ export function parseKeyString(
       warning.looseModifierKeys ||= state.ctrlKey || state.metaKey || state.altKey;
       state.shiftKey = true;
     }
-  } else if (/^[a-z]$/.test(state.key)) {
-    if (state.shiftKey) {
-      warning.looseKey = true;
-      state.key = state.key.toUpperCase();
-    }
+  } else if (/^[a-z]$/.test(state.key) && state.shiftKey) {
+    warning.looseKey = true;
+    state.key = state.key.toUpperCase();
   }
 
   const warningEntries = Object.entries(warning).filter(([_k, v]) => v);
 
   return {
     ...state,
-    warning: warningEntries.length ? Object.fromEntries(warningEntries) : null,
+    warning: warningEntries.length > 0 ? Object.fromEntries(warningEntries) : null,
   };
 }
