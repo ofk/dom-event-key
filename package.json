@@ -1,6 +1,6 @@
 {
   "name": "dom-event-key",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "dom-event-key simplifies handling browser keyboard events",
   "license": "MIT",
   "author": "ofk <ofkjpn+npm@gmail.com> (https://github.com/ofk/)",
