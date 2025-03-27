@@ -1,11 +1,8 @@
+import { describe, expect, it } from 'vitest';
 import { parseKeyString } from '../src/parseKeyString';
 
-const itReturnsTheResultOfParsing = (input: string, fn: Parameters<typeof it>[1]): void => {
-  it(`returns the result of pressing ${JSON.stringify(input)}`, fn);
-};
-
 const testParsing = (input: string, state: Partial<ReturnType<typeof parseKeyString>>): void => {
-  itReturnsTheResultOfParsing(input, () => {
+  it(`returns the result of pressing ${JSON.stringify(input)}`, () => {
     expect(parseKeyString(input)).toEqual({
       ctrlKey: false,
       metaKey: false,
@@ -25,7 +22,7 @@ describe('parseKeyString', () => {
   testParsing('Control+Meta', { ctrlKey: true, metaKey: true });
   testParsing('Meta+a', { key: 'a', metaKey: true });
   testParsing('Modifier+a', { key: 'a', ctrlKey: true });
-  itReturnsTheResultOfParsing('Modifier+a for Mac', () => {
+  it('returns the result of pressing "Modifier+a for Mac"', () => {
     expect(parseKeyString('Modifier+a', { metaModifierKey: true })).toEqual({
       ctrlKey: false,
       metaKey: true,

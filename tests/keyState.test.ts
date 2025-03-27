@@ -1,15 +1,12 @@
+import { describe, expect, it } from 'vitest';
 import { createKeyState, equalKeyState } from '../src/keyState';
-
-const itReturnsTheResultOfPressing = (label: string, fn: Parameters<typeof it>[1]): void => {
-  it(`returns the result of pressing ${label}`, fn);
-};
 
 const testPressing = (
   label: string,
   eventInit: KeyboardEventInit,
   fn: (actual: KeyboardEvent) => void,
 ): void => {
-  itReturnsTheResultOfPressing(label, () => {
+  it(`returns the result of pressing ${label}`, () => {
     fn(new KeyboardEvent('keydown', eventInit));
   });
 };
@@ -19,7 +16,7 @@ const testModifierPressing = (
   eventInit: KeyboardEventInit,
   fn: (actual: KeyboardEvent) => void,
 ): void => {
-  itReturnsTheResultOfPressing(label, () => {
+  it(`returns the result of pressing ${label}`, () => {
     fn(new KeyboardEvent('keydown', eventInit));
     (['ctrlKey', 'metaKey', 'altKey', 'shiftKey'] as const).forEach((key) => {
       if (eventInit[key]) {

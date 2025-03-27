@@ -1,15 +1,12 @@
+import { describe, expect, it } from 'vitest';
 import { createKeyStrings } from '../src/createKeyStrings';
-
-const itReturnsTheResultOfPressing = (label: string, fn: Parameters<typeof it>[1]): void => {
-  it(`returns the result of pressing ${label}`, fn);
-};
 
 const testPressing = (
   label: string,
   eventInit: KeyboardEventInit,
   fn: (actual: KeyboardEvent) => void,
 ): void => {
-  itReturnsTheResultOfPressing(label, () => {
+  it(`returns the result of pressing ${label}`, () => {
     fn(new KeyboardEvent('keydown', eventInit));
   });
 };
@@ -270,7 +267,7 @@ describe('createKeyStrings', () => {
     { defaults: ['Control+Shift'], win: ['Modifier+Shift', 'Control+Shift'] },
   );
 
-  itReturnsTheResultOfPressing('Control+Meta+Alt+Shift', () => {
+  it('returns the result of pressing Control+Meta+Alt+Shift', () => {
     ['Control', 'Meta', 'Alt', 'Shift'].forEach((key) => {
       expect(
         createKeyStrings(
