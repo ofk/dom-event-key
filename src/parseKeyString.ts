@@ -33,7 +33,7 @@ export function parseKeyString(
 
   let m: RegExpExecArray | null = null;
   const reg = /(.[^+]*)(?:\+|$)/g;
-  // eslint-disable-next-line no-cond-assign
+
   while ((m = reg.exec(keyString))) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rawKey = m[1]!;
@@ -66,7 +66,6 @@ export function parseKeyString(
       state.altKey = true;
     } else {
       const validKey =
-        // eslint-disable-next-line no-nested-ternary
         key.length === 0
           ? 'Space'
           : key.length === 1

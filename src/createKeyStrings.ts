@@ -13,7 +13,7 @@ function toCtrlMetaStrings(
   { modifierKey, metaModifierKey = false }: ToCtrlMetaStringsOptions,
 ): KeyStrings {
   const ctrlMeta = `${ctrlKey ? '+Control' : ''}${metaKey ? '+Meta' : ''}`;
-  // eslint-disable-next-line no-nested-ternary
+
   const isModkey = modifierKey
     ? metaModifierKey
       ? !ctrlKey && metaKey
