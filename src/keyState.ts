@@ -15,7 +15,7 @@ export function createKeyState(state: KeyState): KeyState {
     metaKey: state.key === 'Meta' || state.metaKey,
     altKey: state.key === 'Alt' || state.altKey,
     shiftKey: state.key === 'Shift' || state.shiftKey,
-    // eslint-disable-next-line no-nested-ternary
+
     key: regModifierKeys.test(state.key) ? '' : state.key === ' ' ? 'Space' : state.key,
     code: state.code,
   };

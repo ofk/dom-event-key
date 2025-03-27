@@ -23,7 +23,6 @@ const testModifierPressing = (
     fn(new KeyboardEvent('keydown', eventInit));
     (['ctrlKey', 'metaKey', 'altKey', 'shiftKey'] as const).forEach((key) => {
       if (eventInit[key]) {
-        // eslint-disable-next-line no-param-reassign
         eventInit[key] = !eventInit[key];
       }
     });
